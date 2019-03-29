@@ -24,8 +24,15 @@ int main(int argc, char **argv)
   }
 
   // Repeatly read and print entries
-
+  while ((pDirent = readdir(pDir)) != NULL) {
+    stat(pDirent->d_name, &sizebuf);
+    if ((sizebuf.st_mode & S_IFDIR) != 0) { //S_IFDIR is a specification of sizebuf.st_mode 
+      printf("\t<DIR>  %s\n", pDirent->d_name);
+    } else {
+      printf("  %10ld  %s\n", sizebuf.st_size, pDirent->d_name);
+    }
+  }
   // Close directory
-
+  closedir(pDir);
   return 0;
 }
